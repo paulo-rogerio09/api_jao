@@ -1,4 +1,5 @@
-﻿using api_teste.models;
+﻿using api_teste.DTOs;
+using api_teste.models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api_teste.Controllers
@@ -60,6 +61,37 @@ namespace api_teste.Controllers
 
             return StatusCode(StatusCodes.Status201Created, tarefa);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] TarefaDtos item)
+        {
+            var tarefa = listaTarefa.Where(item =>item.Id == id).FirstOrDefault();
+
+            if (tarefa == null)
+            {
+                return NotFound();
+            }
+
+            tarefa.Descricao = item.Descricao;
+            tarefa.Feito = item.Feito;
+            return Ok(listaTarefa);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var tarefa = listaTarefa.Where(item => item.Id == id).FirstOrDefault();
+
+            if(tarefa == null)
+            {
+                return NotFound();
+            }
+            listaTarefa.Remove(tarefa);
+            return Ok(tarefa);
+        }
+
+
+
 
     }
 }
